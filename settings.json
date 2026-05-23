@@ -1,0 +1,26 @@
+{
+  "symbols": [
+    "6758.T",
+    "7974.T",
+    "9936.T",
+    "7867.T",
+    "1328.T"
+  ],
+  "charts": [
+    {
+      "value": 1,
+      "unit": "d",
+      "interval": "15m"
+    },
+    {
+      "value": 2,
+      "unit": "m",
+      "interval": "1d"
+    },
+    {
+      "value": 2,
+      "unit": "y",
+      "interval": "1d"
+    }
+  ]
+}
