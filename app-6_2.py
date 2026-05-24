@@ -19,7 +19,7 @@ st.markdown("""
     .stock-item {
         font-size: 14px !important;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;   /* ← ここを変更 */
         align-items: center;
         white-space: nowrap;
     }
