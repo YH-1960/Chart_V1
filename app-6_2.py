@@ -301,13 +301,38 @@ with left_col:
     symbols = settings["symbols"]
 
     for i, sym in enumerate(symbols):
-        cols = st.columns([4, 1])
-        cols[0].write(sym)
-        if cols[1].button("削除", key=f"del_{i}"):
-            symbols.pop(i)
-            settings["symbols"] = symbols
-            save_settings(settings)   # ← 追加
-            st.rerun()
+       company_name = get_company_name_from_jpx(sym)
+
+       cols = st.columns([4, 1, 1, 1])
+
+       # 銘柄コード + 銘柄名
+       cols[0].markdown(
+           f"<b>{sym}</b> <span style='color:gray;'>{company_name}</span>",
+           unsafe_allow_html=True
+       )
+
+       # ↑ ボタン（上へ移動）
+       if cols[1].button("↑", key=f"up_{i}"):
+          if i > 0:
+             symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+             settings["symbols"] = symbols
+             save_settings(settings)
+             st.rerun()
+
+       # ↓ ボタン（下へ移動）
+       if cols[2].button("↓", key=f"down_{i}"):
+          if i < len(symbols) - 1:
+             symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+             settings["symbols"] = symbols
+             save_settings(settings)
+             st.rerun()
+
+       # 削除ボタン
+       if cols[3].button("削除", key=f"del_{i}"):
+           symbols.pop(i)
+           settings["symbols"] = symbols
+           save_settings(settings)
+           st.rerun()
 
     new_symbol = st.text_input("銘柄を追加", "")
     if st.button("追加"):
