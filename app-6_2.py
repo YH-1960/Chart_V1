@@ -82,6 +82,25 @@ def safe_series(data):
     data = pd.to_numeric(data, errors="coerce")
     data = data.dropna()
     return data.reset_index(drop=True)
+# ==================================================
+# JPX 銘柄一覧 CSV 読み込み
+# ==================================================
+JPX_CSV_URL = "https://raw.githubusercontent.com/YH-1960/jpx-list/refs/heads/main/data_j.csv"
+
+@st.cache_data(ttl=86400)
+def load_jpx_list():
+    df = pd.read_csv(JPX_CSV_URL, encoding="utf-8")
+    df["コード"] = df["コード"].astype(str).str.zfill(4)
+    return df
+
+def get_company_name_from_jpx(symbol):
+    code = symbol.replace(".T", "")
+    df = load_jpx_list()
+    row = df[df["コード"] == code]
+    if len(row) == 0:
+        return ""
+    return row.iloc[0]["銘柄名"]
+
 
 # ==================================================
 # yfinance 制限対応
@@ -185,12 +204,7 @@ for idx, chart in enumerate(settings["charts"]):
         currency = data["currency"]
 
         # --- 銘柄名を取得 ---
-        ticker = yf.Ticker(symbol)
-        try:
-            info = ticker.get_info()
-            company_name = info.get("longName", "")
-        except Exception:
-            company_name = ""
+        company_name = get_company_name_from_jpx(symbol)
 
         open_data = safe_series(df["Open"])
         high_data = safe_series(df["High"])
