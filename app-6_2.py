@@ -335,9 +335,11 @@ with left_col:
 
        # 銘柄コード + 銘柄名
        cols[0].markdown(
-           f"<b>{sym}</b> <span style='color:gray;'>{company_name}</span>",
-           unsafe_allow_html=True
+          f"<div class='stock-item'><b>{sym}</b>"
+          f"<span class='stock-name'>{company_name}</span></div>",
+          unsafe_allow_html=True
        )
+ 
 
        # ↑ ボタン（上へ移動）
        if cols[1].button("↑", key=f"up_{i}"):
