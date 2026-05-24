@@ -197,9 +197,11 @@ for idx, chart in enumerate(settings["charts"]):
         data = fetch_stock_data(symbol, period, interval)
 
         # タイトルを銘柄コード付きに変更
+        company_name = get_company_name_from_jpx(symbol)
+
         title = (
-          f"<b>{value}{unit} ({interval})</b>"
-          f"　<span style='font-size:14px;color:gray;'>{symbol}</span>"
+             f"<b>{value}{unit} ({interval})</b>"
+             f"　<span style='font-size:14px;color:gray;'>{company_name}</span>"
         )
 
         if data is None or "error" in data:
