@@ -187,7 +187,8 @@ for idx, chart in enumerate(settings["charts"]):
         # --- 銘柄名を取得 ---
         ticker = yf.Ticker(symbol)
         try:
-            company_name = ticker.info.get("longName", "")
+            info = ticker.get_info()
+            company_name = info.get("longName", "")
         except Exception:
             company_name = ""
 
