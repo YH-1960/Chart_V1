@@ -217,8 +217,16 @@ for idx, chart in enumerate(settings["charts"]):
         low_data = safe_series(df["Low"])
         close_data = safe_series(df["Close"])
 
-        latest_close = float(close_data.iloc[-1])
-        prev_close = float(close_data.iloc[-2]) if len(close_data) >= 2 else latest_close
+        # データ取得（直近2営業日）
+        stock = yf.Ticker(symbol)
+        hist = stock.history(period="2d")
+
+        # 最新終値
+        latest_close = hist["Close"].iloc[-1]
+
+        # 前日終値
+        prev_close = hist["Close"].iloc[-2]
+
         diff = latest_close - prev_close
         pct = diff / prev_close * 100 if prev_close != 0 else 0
         color = "red" if diff > 0 else "blue" if diff < 0 else "gray"
@@ -275,6 +283,7 @@ for idx, chart in enumerate(settings["charts"]):
                "displayModeBar": False,
                "staticPlot": True
            }
+           # key=f"chart_{idx}_{symbol}"
         )
 
 
