@@ -189,12 +189,18 @@ for idx, chart in enumerate(settings["charts"]):
     interval = chart["interval"]
 
     period = get_allowed_period(value, unit, interval)
-    title = f"{value}{unit} ({interval})"
+    # title = f"{value}{unit} ({interval})"
 
     cols = st.columns(len(symbols))
 
     for col, symbol in zip(cols, symbols):
         data = fetch_stock_data(symbol, period, interval)
+
+        # タイトルを銘柄コード付きに変更
+        title = (
+          f"<b>{value}{unit} ({interval})</b>"
+          f"　<span style='font-size:14px;color:gray;'>{symbol}</span>"
+        )
 
         if data is None or "error" in data:
             col.error("データなし")
@@ -261,7 +267,16 @@ for idx, chart in enumerate(settings["charts"]):
         fig.update_xaxes(tickfont=dict(size=14)) # X軸
         fig.update_yaxes(tickfont=dict(size=16)) # Y軸
 
-        col.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+        # col.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+        col.plotly_chart(
+           fig,
+           use_container_width=True,
+           config={
+               "displayModeBar": False,
+               "staticPlot": True
+           }
+        )
+
 
 # ==================================================
 # 銘柄リスト & チャート設定（チャートの下で横並び）
@@ -282,6 +297,7 @@ with left_col:
         if cols[1].button("削除", key=f"del_{i}"):
             symbols.pop(i)
             settings["symbols"] = symbols
+            save_settings(settings)   # ← 追加
             st.rerun()
 
     new_symbol = st.text_input("銘柄を追加", "")
@@ -289,6 +305,7 @@ with left_col:
         if new_symbol.strip():
             symbols.append(new_symbol.strip())
             settings["symbols"] = symbols
+            save_settings(settings)   # ← 追加
             st.rerun()
 
 # -----------------------------
@@ -336,6 +353,9 @@ with right_col:
             chart["value"] = value
             chart["unit"] = unit
             chart["interval"] = INTERVAL_OPTIONS[interval_label]
+
+            # ★ ここに追加！
+            save_settings(settings)
 
     if st.button("銘柄リスト、チャート設定を保存"):
         save_settings(settings)
