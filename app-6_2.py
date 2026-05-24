@@ -11,6 +11,32 @@ import os
 st.set_page_config(layout="wide")
 
 # ==================================================
+# CSS（スマホ最適化）
+# ==================================================
+st.markdown("""
+<style>
+@media (max-width: 600px) {
+    .stock-item {
+        font-size: 14px !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        white-space: nowrap;
+    }
+    .stock-name {
+        color: gray;
+        margin-left: 4px;
+        font-size: 12px;
+    }
+    .stock-buttons button {
+        padding: 0px 4px !important;
+        font-size: 12px !important;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ==================================================
 # 保存ファイル
 # ==================================================
 SAVE_FILE = "settings.json"
