@@ -15,22 +15,59 @@ st.set_page_config(layout="wide")
 # ==================================================
 st.markdown("""
 <style>
+
+/* 銘柄行 */
+.stock-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    width: 100%;
+}
+
+/* 左側 */
+.stock-info {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+/* 銘柄名 */
+.stock-name {
+    color: gray;
+    margin-left: 6px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ボタン */
+.stock-buttons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* スマホ */
 @media (max-width: 600px) {
-    .stock-item {
-        font-size: 14px !important;
-        display: flex;
-        justify-content: flex-start;   /* ← ここを変更 */
-        align-items: center;
-        white-space: nowrap;
+
+    .stock-info {
+        font-size: 14px;
     }
+
     .stock-name {
-        color: gray;
-        margin-left: 4px;
-        font-size: 12px;
+        font-size: 11px;
     }
+
     .stock-buttons button {
-        padding: 0px 4px !important;
-        font-size: 12px !important;
+        padding: 0px 6px !important;
+        min-height: 32px !important;
+    }
+
+    div[data-testid="column"] {
+        width: 100% !important;
     }
 }
 </style>
@@ -329,40 +366,49 @@ with left_col:
     symbols = settings["symbols"]
 
     for i, sym in enumerate(symbols):
-       company_name = get_company_name_from_jpx(sym)
 
-       cols = st.columns([4, 0.5, 0.5, 0.8])
+        company_name = get_company_name_from_jpx(sym)
 
-       # 銘柄コード + 銘柄名
-       cols[0].markdown(
-          f"<div class='stock-item'><b>{sym}</b>"
-          f"<span class='stock-name'>{company_name}</span></div>",
-          unsafe_allow_html=True
-       )
- 
+        row = st.columns([6, 2])
 
-       # ↑ ボタン（上へ移動）
-       if cols[1].button("↑", key=f"up_{i}"):
-          if i > 0:
-             symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-             settings["symbols"] = symbols
-             save_settings(settings)
-             st.rerun()
+        # 左：銘柄情報
+        with row[0]:
+           st.markdown(
+              f"""
+              <div class="stock-info">
+                  <b>{sym}</b>
+                  <span class="stock-name">{company_name}</span>
+              </div>
+              """,
+              unsafe_allow_html=True
+           )
+        
+        # 右：ボタン
+        with row[1]:
+            bcols = st.columns(3)
 
-       # ↓ ボタン（下へ移動）
-       if cols[2].button("↓", key=f"down_{i}"):
-          if i < len(symbols) - 1:
-             symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-             settings["symbols"] = symbols
-             save_settings(settings)
-             st.rerun()
+            # ↑
+            if bcols[0].button("↑", key=f"up_{i}"):
+                if i > 0:
+                    symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                    settings["symbols"] = symbols
+                    save_settings(settings)
+                    st.rerun()
 
-       # 削除ボタン
-       if cols[3].button("削除", key=f"del_{i}"):
-           symbols.pop(i)
-           settings["symbols"] = symbols
-           save_settings(settings)
-           st.rerun()
+            # ↓
+            if bcols[1].button("↓", key=f"down_{i}"):
+                if i < len(symbols)-1:
+                    symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                    settings["symbols"] = symbols
+                    save_settings(settings)
+                    st.rerun()
+
+        # 削除
+        if bcols[2].button("✕", key=f"del_{i}"):
+            symbols.pop(i)
+            settings["symbols"] = symbols
+            save_settings(settings)
+            st.rerun()
 
     new_symbol = st.text_input("銘柄を追加", "")
     if st.button("追加"):
