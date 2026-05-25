@@ -113,16 +113,7 @@ div[data-testid="column"] {
     margin: 0 !important;
 }
 
-/* ★ Streamlit の columns 親要素も横並び固定にする */
-div[data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    justify-content: flex-start !important;   /* ← 中央寄せをやめる */
-    align-items: center !important;
-    width: 100% !important;                   /* ← 左切れ防止 */
-    gap: 4px !important;                      /* ← PC の間隔を詰める */
-}
+
 
 </style>
 """, unsafe_allow_html=True)
