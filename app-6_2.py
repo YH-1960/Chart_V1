@@ -50,12 +50,6 @@ st.markdown("""
     flex-shrink: 0;
 }
 
-/* columns の下余白を削除 */
-div[data-testid="stHorizontalBlock"] {
-    gap: 0.3rem;
-    margin-bottom: -12px;
-}
-
 /* ボタン高さ縮小 */
 button[kind="secondary"] {
     min-height: 32px !important;
@@ -117,6 +111,16 @@ div[data-testid="column"] {
     flex-wrap: nowrap !important;   /* ← これが決定打 */
     padding: 0 !important;
     margin: 0 !important;
+}
+
+/* ★ Streamlit の columns 親要素も横並び固定にする */
+div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 6px !important;
 }
 
 
