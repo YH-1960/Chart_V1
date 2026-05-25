@@ -390,21 +390,9 @@ with left_col:
         flex-direction: column;
         font-size: 15px;
     }
-    .stock-buttons {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-    }
-    .stock-buttons > div > button {
-        padding: 4px 8px;
-        font-size: 13px;
-    }
-
     @media (max-width: 600px) {
-        .stock-buttons > div > button {
-            padding: 2px 4px !important;
-            font-size: 11px !important;
-            min-width: 32px !important;
+        .stock-left {
+            font-size: 14px;
         }
     }
     </style>
@@ -413,7 +401,7 @@ with left_col:
     for i, sym in enumerate(symbols):
         company_name = get_company_name_from_jpx(sym)
 
-        # 1行目（銘柄名＋ボタン置き場）
+        # 1行目：銘柄名（HTML）
         st.markdown(
             f"""
             <div class="stock-row">
@@ -421,45 +409,43 @@ with left_col:
                     <b>{sym}</b>
                     <span style="color:gray;">{company_name}</span>
                 </div>
-                <div class="stock-buttons" id="btns_{i}">
-                </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        # 2行目：ボタンを Streamlit で描画（HTML の直後に並ぶ）
-        btn_up = st.button("↑", key=f"up_{i}")
-        btn_down = st.button("↓", key=f"down_{i}")
-        btn_del = st.button("削除", key=f"del_{i}")
+        # 2行目：ボタン（Streamlit columns）
+        col_up, col_down, col_del = st.columns([1, 1, 1])
 
-        # ボタン処理
-        if btn_up:
-            if i > 0:
-                symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+        with col_up:
+            if st.button("↑", key=f"up_{i}"):
+                if i > 0:
+                    symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                    settings["symbols"] = symbols
+                    save_settings(settings)
+                    st.rerun()
+
+        with col_down:
+            if st.button("↓", key=f"down_{i}"):
+                if i < len(symbols)-1:
+                    symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                    settings["symbols"] = symbols
+                    save_settings(settings)
+                    st.rerun()
+
+        with col_del:
+            if st.button("削除", key=f"del_{i}"):
+                symbols.pop(i)
                 settings["symbols"] = symbols
                 save_settings(settings)
                 st.rerun()
 
-        if btn_down:
-            if i < len(symbols)-1:
-                symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                settings["symbols"] = symbols
-                save_settings(settings)
-                st.rerun()
-
-        if btn_del:
-            symbols.pop(i)
-            settings["symbols"] = symbols
-            save_settings(settings)
-            st.rerun()
 
 
 
 
 
-
-   # ----------
+   # ***************************************************
     new_symbol = st.text_input("銘柄を追加", "")
     if st.button("追加"):
         if new_symbol.strip():
