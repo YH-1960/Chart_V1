@@ -14,6 +14,7 @@ st.set_page_config(layout="wide")
 # CSS（スマホ最適化）
 # ==================================================
 st.markdown("""
+
 <style>
 
 /* 銘柄行 */
@@ -22,7 +23,6 @@ st.markdown("""
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    #width: 100%;
     width: auto;
 }
 
@@ -51,14 +51,13 @@ st.markdown("""
     flex-shrink: 0;
 }
 
-/* ボタン高さ縮小 */
+/* ボタン高さ */
 button[kind="secondary"] {
     min-height: 32px !important;
     padding: 0px 8px !important;
 }
 
-
-/* ボタン横並び用 */
+/* ボタン横並び */
 .stock-btn-row {
     display: flex;
     flex-direction: row;
@@ -70,15 +69,16 @@ button[kind="secondary"] {
     font-size: 13px;
 }
 
-
-
+/* Streamlit columns の余白削除 */
 div[data-testid="column"] > div {
     margin: 0 !important;
     padding: 0 !important;
+    width: auto;
+    display: flex;
+    justify-content: flex-start !important;
 }
 
-
-/* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
+/* ★ columns を PC/スマホ共通で横並び固定 */
 div[data-testid="column"] {
     display: flex !important;
     flex-direction: row !important;
@@ -89,30 +89,21 @@ div[data-testid="column"] {
     margin: 0 !important;
 }
 
-/* columns 内を左寄せ */
-div[data-testid="column"] > div {
-    #width: 100%;
-    width: auto;
-
-    display: flex;
-    justify-content: flex-start !important;
-}
-
-/* ★ Streamlit の columns 親要素も横並び固定にする */
+/* ★ columns の親（stHorizontalBlock）も横並び固定 */
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    justify-content: flex-start !important;   /* ← 中央寄せをやめる */
+    justify-content: flex-start !important;
     align-items: center !important;
-    # width: 100% !important;                   /* ← 左切れ防止 */
     width: auto !important;
-    gap: 2px !important;                      /* ← PC の間隔を詰める */
+    gap: 2px !important;
 }
 
-
-
 </style>
+
+
+
 """, unsafe_allow_html=True)
 
 # ==================================================
