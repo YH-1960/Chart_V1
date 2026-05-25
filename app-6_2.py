@@ -369,47 +369,44 @@ with left_col:
 
         company_name = get_company_name_from_jpx(sym)
 
-        row = st.columns([6, 2])
+        # 1行を flex で作る
+        st.markdown(
+            f"""
+            <div class="stock-row">
+                <div class="stock-info">
+                    <b>{sym}</b>
+                    <span class="stock-name">{company_name}</span>
+                </div>
+           </div>
+           """,
+           unsafe_allow_html=True
+        )
 
-        # 左：銘柄情報
-        with row[0]:
-           st.markdown(
-              f"""
-              <div class="stock-info">
-                  <b>{sym}</b>
-                  <span class="stock-name">{company_name}</span>
-              </div>
-              """,
-              unsafe_allow_html=True
-           )
-        
-        # 右：ボタン
-        with row[1]:
-            bcols = st.columns(3)
+        # ボタンは横並びで配置
+        b1, b2, b3 = st.columns([1,1,1])
 
-            # ↑
-            if bcols[0].button("↑", key=f"up_{i}"):
-                if i > 0:
-                    symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
+        if b1.button("↑", key=f"up_{i}"):
+            if i > 0:
+                symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                settings["symbols"] = symbols
+                save_settings(settings)
+                st.rerun()
 
-            # ↓
-            if bcols[1].button("↓", key=f"down_{i}"):
-                if i < len(symbols)-1:
-                    symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
+        if b2.button("↓", key=f"down_{i}"):
+            if i < len(symbols)-1:
+                symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                settings["symbols"] = symbols
+                save_settings(settings)
+                st.rerun()
 
-        # 削除
-        if bcols[2].button("✕", key=f"del_{i}"):
+        if b3.button("✕", key=f"del_{i}"):
             symbols.pop(i)
             settings["symbols"] = symbols
             save_settings(settings)
             st.rerun()
 
+
+   # ----------
     new_symbol = st.text_input("銘柄を追加", "")
     if st.button("追加"):
         if new_symbol.strip():
