@@ -368,9 +368,8 @@ for idx, chart in enumerate(settings["charts"]):
 # 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
 left_col, right_col,dunny_col = st.columns([0.6, 0.6,1.0])
-
 # -----------------------------
-# 左：銘柄リスト
+# 左：銘柄リスト（columns 不使用）
 # -----------------------------
 with left_col:
     st.markdown("## 銘柄リスト")
@@ -383,15 +382,30 @@ with left_col:
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 6px 0;
+        padding: 8px 0;
         width: 100%;
+        border-bottom: 1px solid #eee;
     }
+
+    .stock-left {
+        display: flex;
+        flex-direction: column;
+        font-size: 15px;
+    }
+
     .stock-buttons {
         display: flex;
-        gap: 4px;
+        gap: 6px;
     }
+
+    /* Streamlit ボタンを小さくする */
+    .stock-buttons > div > button {
+        padding: 4px 8px;
+        font-size: 13px;
+    }
+
     @media (max-width: 600px) {
-        .stock-buttons button {
+        .stock-buttons > div > button {
             padding: 2px 4px !important;
             font-size: 11px !important;
             min-width: 32px !important;
@@ -404,36 +418,46 @@ with left_col:
         company_name = get_company_name_from_jpx(sym)
 
         # 1行を flex で作る
-        col1, col2, col3, col4 = st.columns([4, 0.6, 0.6, 0.8])
+        st.markdown(
+            f"""
+            <div class="stock-row">
+                <div class="stock-left">
+                    <b>{sym}</b>
+                    <span style="color:gray;">{company_name}</span>
+                </div>
+                <div class="stock-buttons" id="btns_{i}">
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
-        with col1:
-            st.markdown(
-                f"**{sym}** <span style='color:gray;'>{company_name}</span>",
-                unsafe_allow_html=True
-            )
+        # ボタンを HTML の中に埋め込む（columns を使わない）
+        btn_up = st.button("↑", key=f"up_{i}")
+        btn_down = st.button("↓", key=f"down_{i}")
+        btn_del = st.button("削除", key=f"del_{i}")
 
-        with col2:
-            if st.button("↑", key=f"up_{i}"):
-                if i > 0:
-                    symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
-
-        with col3:
-            if st.button("↓", key=f"down_{i}"):
-                if i < len(symbols)-1:
-                    symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
-
-        with col4:
-            if st.button("削除", key=f"del_{i}"):
-                symbols.pop(i)
+        # ボタン処理
+        if btn_up:
+            if i > 0:
+                symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
                 settings["symbols"] = symbols
                 save_settings(settings)
                 st.rerun()
+
+        if btn_down:
+            if i < len(symbols)-1:
+                symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                settings["symbols"] = symbols
+                save_settings(settings)
+                st.rerun()
+
+        if btn_del:
+            symbols.pop(i)
+            settings["symbols"] = symbols
+            save_settings(settings)
+            st.rerun()
+
 
 
 
