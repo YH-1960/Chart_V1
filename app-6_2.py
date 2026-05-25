@@ -413,7 +413,7 @@ with left_col:
         company_name = get_company_name_from_jpx(sym)
 
         # 左：銘柄名（広め） / 右：ボタン3つ（固定幅）
-        col_name, col_btns = st.columns([6, 3])
+        col_name, col_btns = st.columns([7.5, 2.5])
 
         with col_name:
             st.markdown(
@@ -423,7 +423,7 @@ with left_col:
 
         with col_btns:
             # ボタン3つをさらに columns で横並びに
-            b1, b2, b3 = st.columns([1, 1, 1])
+            b1, b2, b3 = st.columns([0.4, 0.4, 0.8])
 
             with b1:
                 if st.button("↑", key=f"up_{i}"):
