@@ -420,13 +420,15 @@ with left_col:
         padding: 4px 8px;
         font-size: 13px;
     }
-    @media (max-width: 600px) {
-        .stock-buttons > div > button {
-            padding: 2px 4px !important;
-            font-size: 11px !important;
-            min-width: 32px !important;
-        }
-    }
+
+    #@media (max-width: 600px) {
+    #    .stock-buttons > div > button {
+    #        padding: 2px 4px !important;
+    #        font-size: 11px !important;
+    #        min-width: 32px !important;
+    #    }
+    #}
+
     </style>
     """, unsafe_allow_html=True)
 
