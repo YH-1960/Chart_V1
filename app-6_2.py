@@ -69,33 +69,50 @@ button[kind="secondary"] {
     padding: 4px 8px;
     font-size: 13px;
 }
+
 @media (max-width: 600px) {
+
+    /* 横並び全体 */
+    div[data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+    }
+
+    /* columns */
+    div[data-testid="column"] {
+        flex: unset !important;
+        width: auto !important;
+        min-width: unset !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* ボタン行 */
+    .stock-btn-row,
+    .stock-buttons,
+    .stock-buttons > div {
+        gap: 2px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ボタン本体 */
     .stock-btn-row button {
         padding: 2px 4px !important;
         font-size: 11px !important;
         min-width: 32px !important;
+
+        margin: 0 !important;
+    }
+
+    /* Streamlit button wrapper */
+    div.stButton {
+        margin: 0 !important;
+        padding: 0 !important;
     }
 }
 
-@media (max-width: 600px) {
-    div[data-testid="column"] {
-        flex-wrap: wrap !important;   /* ← 折り返しを許可 */
-        justify-content: flex-start !important;
-    }
 
-    div[data-testid="stHorizontalBlock"] {
-        flex-wrap: wrap !important;   /* ← 親も折り返し許可 */
-        gap: 2px !important;
-    }
-}
-
-@media (max-width: 600px) {
-    .stock-buttons,
-    .stock-btn-row,
-    .stock-buttons > div {
-        gap: 2px !important;
-    }
-}
 
 
 
