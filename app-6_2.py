@@ -375,7 +375,7 @@ with left_col:
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
 
-    # CSS（スマホ対応）
+    # CSS（スマホ完全対応）
     st.markdown("""
     <style>
     .stock-row {
@@ -387,7 +387,7 @@ with left_col:
         width: 100%;
     }
 
-    .stock-left {
+    .stock-info {
         display: flex;
         flex-direction: column;
         font-size: 15px;
@@ -396,19 +396,22 @@ with left_col:
 
     .stock-buttons {
         display: flex;
-        gap: 6px;
+        gap: 8px;
         flex-shrink: 0;
     }
 
-    .stock-buttons button {
+    /* Streamlit ボタンの見た目を調整 */
+    .stock-buttons > div > button {
         padding: 4px 8px;
-        font-size: 16px;
+        font-size: 18px;
+        min-width: 36px;
     }
 
+    /* スマホ最適化 */
     @media (max-width: 600px) {
-        .stock-buttons button {
+        .stock-buttons > div > button {
             padding: 2px 4px !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
             min-width: 28px !important;
         }
     }
@@ -422,7 +425,7 @@ with left_col:
         st.markdown(
             f"""
             <div class="stock-row">
-                <div class="stock-left">
+                <div class="stock-info">
                     <b>{sym}</b>
                     <span style="color:gray;">{company_name}</span>
                 </div>
