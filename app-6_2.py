@@ -114,6 +114,7 @@ div[data-testid="column"] {
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
+    flex-wrap: nowrap !important;   /* ← これが決定打 */
     padding: 0 !important;
     margin: 0 !important;
 }
