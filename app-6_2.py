@@ -89,6 +89,13 @@ button[kind="secondary"] {
     }
 }
 
+@media (max-width: 600px) {
+    .stock-buttons {
+        gap: 2px !important;   /* ← スマホは最優先で詰める */
+    }
+}
+
+
 
 /* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
 div[data-testid="column"] {
