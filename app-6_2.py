@@ -92,6 +92,26 @@ button[kind="secondary"] {
     }
 }
 
+/* ボタン横並び用 */
+.stock-btn-row {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+.stock-btn-row button {
+    padding: 4px 8px;
+    font-size: 13px;
+}
+@media (max-width: 600px) {
+    .stock-btn-row button {
+        padding: 2px 4px !important;
+        font-size: 11px !important;
+        min-width: 32px !important;
+    }
+}
+
+
 
 # ****************
 </style>
@@ -439,16 +459,14 @@ with left_col:
       )
 
       # ボタン行
-      c1, c2, c3, c4 = st.columns([1,1,1,6])
+      # ★ columns を使わず、flex で横並び固定
+      st.markdown('<div class="stock-btn-row">', unsafe_allow_html=True)
 
-      with c1:
-        up = st.button("↑", key=f"up_{i}", use_container_width=True)
+      up = st.button("↑", key=f"up_{i}")
+      down = st.button("↓", key=f"down_{i}")
+      delete = st.button("Del", key=f"del_{i}")
 
-      with c2:
-        down = st.button("↓", key=f"down_{i}", use_container_width=True)
-
-      with c3:
-        delete = st.button("Del", key=f"del_{i}", use_container_width=True)
+      st.markdown('</div>', unsafe_allow_html=True)
 
       if up:
         if i > 0:
