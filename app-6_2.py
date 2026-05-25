@@ -375,7 +375,6 @@ with left_col:
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
 
-    # CSS（スマホ対応）
     st.markdown("""
     <style>
     .stock-row {
@@ -390,9 +389,20 @@ with left_col:
         flex-direction: column;
         font-size: 15px;
     }
+    .stock-buttons {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+    .stock-buttons > div > button {
+        padding: 4px 8px;
+        font-size: 13px;
+    }
     @media (max-width: 600px) {
-        .stock-left {
-            font-size: 14px;
+        .stock-buttons > div > button {
+            padding: 2px 4px !important;
+            font-size: 11px !important;
+            min-width: 32px !important;
         }
     }
     </style>
@@ -401,44 +411,40 @@ with left_col:
     for i, sym in enumerate(symbols):
         company_name = get_company_name_from_jpx(sym)
 
-        # 1行目：銘柄名（HTML）
-        st.markdown(
-            f"""
-            <div class="stock-row">
-                <div class="stock-left">
-                    <b>{sym}</b>
-                    <span style="color:gray;">{company_name}</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        # 1行で銘柄名＋ボタンを並べる
+        col_left, col_btns = st.columns([4, 2])
 
-        # 2行目：ボタン（Streamlit columns）
-        col_up, col_down, col_del = st.columns([1, 1, 1])
+        with col_left:
+            st.markdown(
+                f"<b>{sym}</b><br><span style='color:gray;'>{company_name}</span>",
+                unsafe_allow_html=True
+            )
 
-        with col_up:
-            if st.button("↑", key=f"up_{i}"):
-                if i > 0:
-                    symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+        with col_btns:
+            col_up, col_down, col_del = st.columns([1, 1, 1])
+
+            with col_up:
+                if st.button("↑", key=f"up_{i}"):
+                    if i > 0:
+                        symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                        settings["symbols"] = symbols
+                        save_settings(settings)
+                        st.rerun()
+
+            with col_down:
+                if st.button("↓", key=f"down_{i}"):
+                    if i < len(symbols)-1:
+                        symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                        settings["symbols"] = symbols
+                        save_settings(settings)
+                        st.rerun()
+
+            with col_del:
+                if st.button("削除", key=f"del_{i}"):
+                    symbols.pop(i)
                     settings["symbols"] = symbols
                     save_settings(settings)
                     st.rerun()
-
-        with col_down:
-            if st.button("↓", key=f"down_{i}"):
-                if i < len(symbols)-1:
-                    symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
-
-        with col_del:
-            if st.button("削除", key=f"del_{i}"):
-                symbols.pop(i)
-                settings["symbols"] = symbols
-                save_settings(settings)
-                st.rerun()
 
 
 
