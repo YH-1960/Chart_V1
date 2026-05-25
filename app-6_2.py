@@ -362,54 +362,41 @@ left_col, right_col,dunny_col = st.columns([0.6, 0.6,1.0])
 # -----------------------------
 with left_col:
     st.markdown("## 銘柄リスト")
-
     symbols = settings["symbols"]
 
     for i, sym in enumerate(symbols):
+       company_name = get_company_name_from_jpx(sym)
+ 
+       col1, col2, col3, col4 = st.columns([3.0, 0.5, 0.5, 0.7])
 
-        company_name = get_company_name_from_jpx(sym)
+       with col1:
+           st.markdown(f"**{sym}**  <span style='color:gray;'>{company_name}</span>", unsafe_allow_html=True)
 
-        # HTML で 1 行を完全に作る
-        st.markdown(
-            f"""
-            <div class="stock-row" style="padding:6px 0;">
-                <div class="stock-info">
-                    <b>{sym}</b>
-                    <span class="stock-name">{company_name}</span>
-                </div>
-                <div class="stock-buttons">
-                    <form action="" method="post">
-                        <button name="action" value="up_{i}">↑</button>
-                        <button name="action" value="down_{i}">↓</button>
-                        <button name="action" value="del_{i}">削除</button>
-                    </form>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+       with col2:
+           if st.button("↑", key=f"up_{i}"):
+               if i > 0:
+                   symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                   settings["symbols"] = symbols
+                   save_settings(settings)
+                   st.rerun()
 
-    # --- ボタン処理 ---
-    action = st.session_state.get("action", None)
+       with col3:
+           if st.button("↓", key=f"down_{i}"):
+               if i < len(symbols)-1:
+                   symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                   settings["symbols"] = symbols
+                   save_settings(settings)
+                   st.rerun()
 
-    if action:
-        if action.startswith("up_"):
-            i = int(action.split("_")[1])
-            if i > 0:
-                symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+       with col4:
+           if st.button("削除", key=f"del_{i}"):
+               symbols.pop(i)
+               settings["symbols"] = symbols
+               save_settings(settings)
+               st.rerun()
 
-        elif action.startswith("down_"):
-            i = int(action.split("_")[1])
-            if i < len(symbols)-1:
-                symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
 
-        elif action.startswith("del_"):
-            i = int(action.split("_")[1])
-            symbols.pop(i)
 
-        settings["symbols"] = symbols
-        save_settings(settings)
-        st.rerun()
 
    # ----------
     new_symbol = st.text_input("銘柄を追加", "")
