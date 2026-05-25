@@ -126,7 +126,7 @@ div[data-testid="column"] {
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
