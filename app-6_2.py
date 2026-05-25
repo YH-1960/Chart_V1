@@ -113,7 +113,10 @@ button[kind="secondary"] {
 }
 
 
-
+div[data-testid="column"] > div {
+    margin: 0 !important;
+    padding: 0 !important;
+}
 
 
 /* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
