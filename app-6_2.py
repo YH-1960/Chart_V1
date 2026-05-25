@@ -369,42 +369,47 @@ with left_col:
 
         company_name = get_company_name_from_jpx(sym)
 
-        # 1行を flex で作る
+        # HTML で 1 行を完全に作る
         st.markdown(
             f"""
-            <div class="stock-row">
+            <div class="stock-row" style="padding:6px 0;">
                 <div class="stock-info">
                     <b>{sym}</b>
                     <span class="stock-name">{company_name}</span>
                 </div>
-           </div>
-           """,
-           unsafe_allow_html=True
+                <div class="stock-buttons">
+                    <form action="" method="post">
+                        <button name="action" value="up_{i}">↑</button>
+                        <button name="action" value="down_{i}">↓</button>
+                        <button name="action" value="del_{i}">✕</button>
+                    </form>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
-        # ボタンは横並びで配置
-        b1, b2, b3 = st.columns([1,1,1])
+    # --- ボタン処理 ---
+    action = st.session_state.get("action", None)
 
-        if b1.button("↑", key=f"up_{i}"):
+    if action:
+        if action.startswith("up_"):
+            i = int(action.split("_")[1])
             if i > 0:
                 symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                settings["symbols"] = symbols
-                save_settings(settings)
-                st.rerun()
 
-        if b2.button("↓", key=f"down_{i}"):
+        elif action.startswith("down_"):
+            i = int(action.split("_")[1])
             if i < len(symbols)-1:
                 symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                settings["symbols"] = symbols
-                save_settings(settings)
-                st.rerun()
 
-        if b3.button("✕", key=f"del_{i}"):
+        elif action.startswith("del_"):
+            i = int(action.split("_")[1])
             symbols.pop(i)
-            settings["symbols"] = symbols
-            save_settings(settings)
-            st.rerun()
 
+        settings["symbols"] = symbols
+        save_settings(settings)
+        st.rerun()
 
    # ----------
     new_symbol = st.text_input("銘柄を追加", "")
