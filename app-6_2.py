@@ -76,23 +76,6 @@ button[kind="secondary"] {
     }
 }
 
-/* ★ スマホでは columns の強制横並びを解除する */
-@media (max-width: 600px) {
-
-    /* columns の強制 flex を OFF にする */
-    div[data-testid="column"] {
-        display: block !important;
-        flex-direction: column !important;
-        flex-wrap: wrap !important;
-        width: auto !important;
-    }
-
-    /* 親要素も wrap を許可 */
-    div[data-testid="stHorizontalBlock"] {
-        flex-wrap: wrap !important;
-        gap: 2px !important;
-    }
-}
 
 
 /* スマホ用：ボタンをさらに小さくする */
@@ -151,6 +134,25 @@ div[data-testid="stHorizontalBlock"] {
     width: 100% !important;                   /* ← 左切れ防止 */
     gap: 2px !important;                      /* ← PC の間隔を詰める */
 }
+
+/* ★ スマホでは columns の強制横並びを解除する */
+@media (max-width: 600px) {
+
+    /* columns の強制 flex を OFF にする */
+    div[data-testid="column"] {
+        display: block !important;
+        flex-direction: column !important;
+        flex-wrap: wrap !important;
+        width: auto !important;
+    }
+
+    /* 親要素も wrap を許可 */
+    div[data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+    }
+}
+
 
 </style>
 """, unsafe_allow_html=True)
