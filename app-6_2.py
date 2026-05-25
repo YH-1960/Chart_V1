@@ -111,9 +111,14 @@ button[kind="secondary"] {
     }
 }
 
+/* ★ Streamlit columns を横並び固定にする */
+div[data-testid="column"] {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+}
 
-
-# ****************
 </style>
 """, unsafe_allow_html=True)
 
@@ -459,14 +464,19 @@ with left_col:
       )
 
       # ボタン行
-      # ★ columns を使わず、flex で横並び固定
-      st.markdown('<div class="stock-btn-row">', unsafe_allow_html=True)
+      # ★ 完全横並び（Streamlit columns）
+      col1, col2, col3 = st.columns([1,1,1])
 
-      up = st.button("↑", key=f"up_{i}")
-      down = st.button("↓", key=f"down_{i}")
-      delete = st.button("Del", key=f"del_{i}")
+      with col1:
+          up = st.button("↑", key=f"up_{i}")
 
-      st.markdown('</div>', unsafe_allow_html=True)
+      with col2:
+          down = st.button("↓", key=f"down_{i}")
+
+      with col3:
+          delete = st.button("Del", key=f"del_{i}")
+
+
 
       if up:
         if i > 0:
@@ -484,9 +494,6 @@ with left_col:
         symbols.pop(i)
         save_settings(settings)
         st.rerun()
-
-      #st.divider()  
-
 
 
 
