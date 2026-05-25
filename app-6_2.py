@@ -106,14 +106,30 @@ button[kind="secondary"] {
 div[data-testid="column"] {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
     align-items: center !important;
     flex-wrap: nowrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
 
+/* columns 内を左寄せ */
+div[data-testid="column"] > div {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start !important;
+}
 
+/* ★ Streamlit の columns 親要素も横並び固定にする */
+div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;   /* ← 中央寄せをやめる */
+    align-items: center !important;
+    width: 100% !important;                   /* ← 左切れ防止 */
+    gap: 4px !important;                      /* ← PC の間隔を詰める */
+}
 
 </style>
 """, unsafe_allow_html=True)
@@ -461,15 +477,15 @@ with left_col:
 
       # ボタン行
       # ★ 完全横並び（Streamlit columns）
-      col1, col2, col3 = st.columns([1,1,1])
+      btn1, btn2, btn3, spacer = st.columns([0.12, 0.12, 0.18, 1])
 
-      with col1:
+      with btn1:
           up = st.button("↑", key=f"up_{i}")
 
-      with col2:
+      with btn2:
           down = st.button("↓", key=f"down_{i}")
 
-      with col3:
+      with btn3:
           delete = st.button("Del", key=f"del_{i}")
 
 
