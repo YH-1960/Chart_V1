@@ -77,6 +77,19 @@ button[kind="secondary"] {
     }
 }
 
+@media (max-width: 600px) {
+    div[data-testid="column"] {
+        flex-wrap: wrap !important;   /* ← 折り返しを許可 */
+        justify-content: flex-start !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;   /* ← 親も折り返し許可 */
+        gap: 2px !important;
+    }
+}
+
+
 /* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
 div[data-testid="column"] {
     display: flex !important;
