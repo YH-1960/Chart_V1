@@ -456,13 +456,25 @@ with left_col:
       btn1, btn2, btn3, spacer = st.columns([0.2,0.2,0.2,1], gap="small")
         
       with btn1:
-          up = st.button("↑", key=f"up_{i}")
+    up = st.button(
+        "↑",
+        key=f"up_{i}",
+        use_container_width=True
+    )
 
-      with btn2:
-          down = st.button("↓", key=f"down_{i}")
+with btn2:
+    down = st.button(
+        "↓",
+        key=f"down_{i}",
+        use_container_width=True
+    )
 
-      with btn3:
-          delete = st.button("X", key=f"del_{i}")
+with btn3:
+    delete = st.button(
+        "X",
+        key=f"del_{i}",
+        use_container_width=True
+    )
 
 
 
