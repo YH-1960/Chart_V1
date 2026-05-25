@@ -58,7 +58,6 @@ button[kind="secondary"] {
 }
 
 
-
 /* ボタン横並び用 */
 .stock-btn-row {
     display: flex;
@@ -71,47 +70,6 @@ button[kind="secondary"] {
     font-size: 13px;
 }
 
-@media (max-width: 600px) {
-
-    /* 横並び全体 */
-    div[data-testid="stHorizontalBlock"] {
-        flex-wrap: wrap !important;
-        gap: 2px !important;
-    }
-
-    /* columns */
-    div[data-testid="column"] {
-        flex: unset !important;
-        width: auto !important;
-        min-width: unset !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* ボタン行 */
-    .stock-btn-row,
-    .stock-buttons,
-    .stock-buttons > div {
-        gap: 2px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* ボタン本体 */
-    .stock-btn-row button {
-        padding: 2px 4px !important;
-        font-size: 11px !important;
-        min-width: 32px !important;
-
-        margin: 0 !important;
-    }
-
-    /* Streamlit button wrapper */
-    div.stButton {
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-}
 
 
 div[data-testid="column"] > div {
@@ -144,7 +102,7 @@ div[data-testid="column"] > div {
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
     justify-content: flex-start !important;   /* ← 中央寄せをやめる */
     align-items: center !important;
     # width: 100% !important;                   /* ← 左切れ防止 */
