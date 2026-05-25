@@ -108,7 +108,7 @@ div[data-testid="column"] {
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
-    flex-wrap: nowrap !important;   /* ← これが決定打 */
+    flex-wrap: nowrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
@@ -118,11 +118,11 @@ div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;   /* ← 中央寄せをやめる */
     align-items: center !important;
-    gap: 6px !important;
+    width: 100% !important;                   /* ← 左切れ防止 */
+    gap: 4px !important;                      /* ← PC の間隔を詰める */
 }
-
 
 </style>
 """, unsafe_allow_html=True)
