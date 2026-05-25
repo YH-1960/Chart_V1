@@ -22,7 +22,8 @@ st.markdown("""
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    width: 100%;
+    #width: 100%;
+    width: auto;
 }
 
 /* 左側 */
@@ -125,14 +126,16 @@ div[data-testid="column"] {
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
 
 /* columns 内を左寄せ */
 div[data-testid="column"] > div {
-    width: 100%;
+    #width: 100%;
+    width: auto;
+
     display: flex;
     justify-content: flex-start !important;
 }
@@ -141,10 +144,11 @@ div[data-testid="column"] > div {
 div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     justify-content: flex-start !important;   /* ← 中央寄せをやめる */
     align-items: center !important;
-    width: 100% !important;                   /* ← 左切れ防止 */
+    # width: 100% !important;                   /* ← 左切れ防止 */
+    width: auto !important;
     gap: 2px !important;                      /* ← PC の間隔を詰める */
 }
 
