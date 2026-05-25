@@ -381,7 +381,7 @@ with left_col:
                     <form action="" method="post">
                         <button name="action" value="up_{i}">↑</button>
                         <button name="action" value="down_{i}">↓</button>
-                        <button name="action" value="del_{i}">✕</button>
+                        <button name="action" value="del_{i}">削除</button>
                     </form>
                 </div>
             </div>
