@@ -375,30 +375,26 @@ with left_col:
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
 
-    # スマホ対応 CSS
+    # CSS（スマホ対応）
     st.markdown("""
     <style>
     .stock-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
-        width: 100%;
+        padding: 10px 0;
         border-bottom: 1px solid #eee;
     }
-
     .stock-left {
         display: flex;
         flex-direction: column;
         font-size: 15px;
     }
-
     .stock-buttons {
         display: flex;
         gap: 6px;
+        align-items: center;
     }
-
-    /* Streamlit ボタンを小さくする */
     .stock-buttons > div > button {
         padding: 4px 8px;
         font-size: 13px;
@@ -417,7 +413,7 @@ with left_col:
     for i, sym in enumerate(symbols):
         company_name = get_company_name_from_jpx(sym)
 
-        # 1行を flex で作る
+        # 1行目（銘柄名＋ボタン置き場）
         st.markdown(
             f"""
             <div class="stock-row">
@@ -432,7 +428,7 @@ with left_col:
             unsafe_allow_html=True
         )
 
-        # ボタンを HTML の中に埋め込む（columns を使わない）
+        # 2行目：ボタンを Streamlit で描画（HTML の直後に並ぶ）
         btn_up = st.button("↑", key=f"up_{i}")
         btn_down = st.button("↓", key=f"down_{i}")
         btn_del = st.button("削除", key=f"del_{i}")
