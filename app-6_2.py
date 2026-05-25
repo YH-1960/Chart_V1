@@ -442,7 +442,7 @@ with left_col:
                       st.rerun()
 
             with b3:
-                if st.button("削除", key=f"del_{i}"):
+                if st.button("Del", key=f"del_{i}"):
                     symbols.pop(i)
                     settings["symbols"] = symbols
                     save_settings(settings)
