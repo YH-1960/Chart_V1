@@ -50,6 +50,18 @@ st.markdown("""
     flex-shrink: 0;
 }
 
+/* columns の下余白を削除 */
+div[data-testid="stHorizontalBlock"] {
+    gap: 0.3rem;
+    margin-bottom: -12px;
+}
+
+/* ボタン高さ縮小 */
+button[kind="secondary"] {
+    min-height: 32px !important;
+    padding: 0px 8px !important;
+}
+
 /* スマホ */
 @media (max-width: 600px) {
 
@@ -382,7 +394,8 @@ with left_col:
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
-        border-bottom: 1px solid #eee;
+        # border-bottom: 1px solid #eee;
+        border-bottom: none;   /* ← これに変更 */
     }
     .stock-left {
         display: flex;
@@ -410,48 +423,51 @@ with left_col:
 
 
     for i, sym in enumerate(symbols):
-        company_name = get_company_name_from_jpx(sym)
+      company_name = get_company_name_from_jpx(sym)
 
-        col_name, col_btns = st.columns([7.5, 2.5])
+      # 銘柄名
+      st.markdown(
+        f"""
+        <div style="font-size:16px;font-weight:bold;margin-bottom:6px;">
+            {sym}
+            <span style="color:gray;font-weight:normal;">
+                {company_name}
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True
+      )
 
-        with col_name:
-            st.markdown(
-                f"<b>{sym}</b> <span style='color:gray;'>{company_name}</span>",
-                unsafe_allow_html=True
-            )
+      # ボタン行
+      c1, c2, c3, c4 = st.columns([1,1,1,6])
 
-        with col_btns:
-            b1, b2, b3 = st.columns([0.5, 0.5, 0.8])
+      with c1:
+        up = st.button("↑", key=f"up_{i}", use_container_width=True)
 
+      with c2:
+        down = st.button("↓", key=f"down_{i}", use_container_width=True)
 
+      with c3:
+        delete = st.button("Del", key=f"del_{i}", use_container_width=True)
 
-        #**************
+      if up:
+        if i > 0:
+            symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+            save_settings(settings)
+            st.rerun()
 
-            with b1:
-                if st.button("↑", key=f"up_{i}"):
-                    if i > 0:
-                      symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                      settings["symbols"] = symbols
-                      save_settings(settings)
-                      st.rerun()
+      if down:
+        if i < len(symbols)-1:
+            symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+            save_settings(settings)
+            st.rerun()
 
-            with b2:
-                if st.button("↓", key=f"down_{i}"):
-                    if i < len(symbols)-1:
-                      symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                      settings["symbols"] = symbols
-                      save_settings(settings)
-                      st.rerun()
+      if delete:
+        symbols.pop(i)
+        save_settings(settings)
+        st.rerun()
 
-            with b3:
-                if st.button("Del", key=f"del_{i}"):
-                    symbols.pop(i)
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
-
-
-
+      #st.divider()  
 
 
 
