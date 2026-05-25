@@ -90,8 +90,10 @@ button[kind="secondary"] {
 }
 
 @media (max-width: 600px) {
-    .stock-buttons {
-        gap: 2px !important;   /* ← スマホは最優先で詰める */
+    .stock-buttons,
+    .stock-btn-row,
+    .stock-buttons > div {
+        gap: 2px !important;
     }
 }
 
