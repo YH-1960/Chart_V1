@@ -56,36 +56,7 @@ button[kind="secondary"] {
     padding: 0px 8px !important;
 }
 
-/* スマホ時：ボタン列を広げない */
-@media (max-width: 600px) {
 
-    div[data-testid="column"] {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        min-width: unset !important;
-    }
-
-    div[data-testid="stHorizontalBlock"] {
-        gap: 1px !important;
-    }
-
-    div[data-testid="column"] button {
-        padding: 2px 4px !important;
-        min-width: 28px !important;
-        font-size: 11px !important;
-    }
-}
-
-
-
-/* スマホ用：ボタンをさらに小さくする */
-@media (max-width: 600px) {
-    button[kind="secondary"] {
-        padding: 2px 4px !important;
-        font-size: 11px !important;
-        min-width: 12px !important;
-    }
-}
 
 /* ボタン横並び用 */
 .stock-btn-row {
