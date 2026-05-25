@@ -56,23 +56,26 @@ button[kind="secondary"] {
     padding: 0px 8px !important;
 }
 
-/* スマホ */
+/* スマホ時：ボタン列を広げない */
 @media (max-width: 600px) {
 
-    .stock-info {
-        font-size: 14px;
+    div[data-testid="column"] {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: unset !important;
     }
 
-    .stock-name {
-        font-size: 11px;
+    div[data-testid="stHorizontalBlock"] {
+        gap: 1px !important;
     }
 
-    .stock-buttons button {
-        padding: 0px 6px !important;
-        min-height: 32px !important;
+    div[data-testid="column"] button {
+        padding: 2px 4px !important;
+        min-width: 28px !important;
+        font-size: 11px !important;
     }
-
 }
+
 
 /* スマホ用：ボタンをさらに小さくする */
 @media (max-width: 600px) {
@@ -128,7 +131,7 @@ div[data-testid="stHorizontalBlock"] {
     justify-content: flex-start !important;   /* ← 中央寄せをやめる */
     align-items: center !important;
     width: 100% !important;                   /* ← 左切れ防止 */
-    gap: 4px !important;                      /* ← PC の間隔を詰める */
+    gap: 2px !important;                      /* ← PC の間隔を詰める */
 }
 
 </style>
