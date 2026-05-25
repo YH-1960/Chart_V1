@@ -78,9 +78,6 @@ button[kind="secondary"] {
         min-height: 32px !important;
     }
 
-    div[data-testid="column"] {
-        width: 100% !important;
-    }
 }
 
 /* スマホ用：ボタンをさらに小さくする */
@@ -111,13 +108,16 @@ button[kind="secondary"] {
     }
 }
 
-/* ★ Streamlit columns を横並び固定にする */
+/* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
 div[data-testid="column"] {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: center;
-    align-items: center;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
+
 
 </style>
 """, unsafe_allow_html=True)
