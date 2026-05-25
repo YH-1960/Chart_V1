@@ -452,7 +452,7 @@ with left_col:
       # ボタン行
       # ★ 完全横並び（Streamlit columns）
       # btn1, btn2, btn3, spacer = st.columns([0.4, 0.4, 0.4, 1])
-      btn1, btn2, btn3 = st.columns([1,1,1])
+      btn1, btn2, btn3 = st.columns([0.4,0.4,0.4])
 
       with btn1:
           up = st.button("↑", key=f"up_{i}")
