@@ -83,7 +83,7 @@ button[kind="secondary"] {
     button[kind="secondary"] {
         padding: 2px 4px !important;
         font-size: 11px !important;
-        min-width: 32px !important;
+        min-width: 12px !important;
     }
 }
 
@@ -135,23 +135,6 @@ div[data-testid="stHorizontalBlock"] {
     gap: 2px !important;                      /* ← PC の間隔を詰める */
 }
 
-/* ★ スマホでは columns の強制横並びを解除する */
-@media (max-width: 600px) {
-
-    /* columns の強制 flex を OFF にする */
-    div[data-testid="column"] {
-        display: block !important;
-        flex-direction: column !important;
-        flex-wrap: wrap !important;
-        width: auto !important;
-    }
-
-    /* 親要素も wrap を許可 */
-    div[data-testid="stHorizontalBlock"] {
-        flex-wrap: wrap !important;
-        gap: 2px !important;
-    }
-}
 
 
 </style>
