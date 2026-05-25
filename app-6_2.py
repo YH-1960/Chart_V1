@@ -408,43 +408,46 @@ with left_col:
     </style>
     """, unsafe_allow_html=True)
 
+
     for i, sym in enumerate(symbols):
         company_name = get_company_name_from_jpx(sym)
 
-        # 1行で銘柄名＋ボタンを並べる
-        col_left, col_btns = st.columns([4, 2])
+        # 左：銘柄名（広め） / 右：ボタン3つ（固定幅）
+        col_name, col_btns = st.columns([6, 3])
 
-        with col_left:
+        with col_name:
             st.markdown(
-                f"<b>{sym}</b><br><span style='color:gray;'>{company_name}</span>",
+                f"<b>{sym}</b> <span style='color:gray;'>{company_name}</span>",
                 unsafe_allow_html=True
             )
 
         with col_btns:
-            col_up, col_down, col_del = st.columns([1, 1, 1])
+            # ボタン3つをさらに columns で横並びに
+            b1, b2, b3 = st.columns([1, 1, 1])
 
-            with col_up:
+            with b1:
                 if st.button("↑", key=f"up_{i}"):
                     if i > 0:
-                        symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                        settings["symbols"] = symbols
-                        save_settings(settings)
-                        st.rerun()
+                      symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                      settings["symbols"] = symbols
+                      save_settings(settings)
+                      st.rerun()
 
-            with col_down:
+            with b2:
                 if st.button("↓", key=f"down_{i}"):
                     if i < len(symbols)-1:
-                        symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                        settings["symbols"] = symbols
-                        save_settings(settings)
-                        st.rerun()
+                      symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                      settings["symbols"] = symbols
+                      save_settings(settings)
+                      st.rerun()
 
-            with col_del:
+            with b3:
                 if st.button("削除", key=f"del_{i}"):
                     symbols.pop(i)
                     settings["symbols"] = symbols
                     save_settings(settings)
                     st.rerun()
+
 
 
 
