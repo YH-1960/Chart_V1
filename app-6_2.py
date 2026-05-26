@@ -89,8 +89,8 @@ div[data-testid="column"] {
 
 /* ★ columns の親（stHorizontalBlock）も横並び固定 */
 div[data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-direction: row !important;
+    # display: flex !important;
+    # flex-direction: row !important;
     flex-wrap: nowrap !important;
     justify-content: flex-start !important;
     align-items: center !important;
