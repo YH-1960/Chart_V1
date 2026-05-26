@@ -121,29 +121,35 @@ div[data-testid="stHorizontalBlock"] {
 
 @media (max-width: 600px) {
 
-    /* ボタン全体を小さく */
-    .stock-buttons button,
-    .stock-btn-row button,
-    button[kind="secondary"] {
-        padding: 2px 4px !important;
-        font-size: 11px !important;
-        min-width: 28px !important;
-        min-height: 26px !important;
-    }
-
-    /* ボタン間の余白も縮小 */
-    .stock-buttons {
-        gap: 2px !important;
-    }
-
-    /* Streamlit columns のボタン（↑ ↓ X） */
+    /* Streamlit columns 内のボタンを強制的に小さく */
     div[data-testid="column"] button {
         padding: 2px 4px !important;
         font-size: 11px !important;
         min-width: 28px !important;
         min-height: 26px !important;
     }
+
+    /* ボタン間の余白も縮める */
+    div[data-testid="column"] {
+        gap: 2px !important;
+    }
+
+    /* stock-buttons にも適用（念のため） */
+    .stock-buttons button {
+        padding: 2px 4px !important;
+        font-size: 11px !important;
+        min-width: 28px !important;
+        min-height: 26px !important;
+    }
 }
+
+@media (max-width: 600px) {
+    .stock-area, .setting-area {
+        width: 100% !important;
+        display: block !important;
+    }
+}
+
 
 
 </style>
@@ -438,19 +444,12 @@ for idx, chart in enumerate(settings["charts"]):
 # ==================================================
 left_col, right_col,dunny_col = st.columns([0.4, 0.6,1.0])
 
-with left_col:
-    st.markdown('<div class="stock-area">', unsafe_allow_html=True)
-    # 銘柄リスト
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with right_col:
-    st.markdown('<div class="setting-area">', unsafe_allow_html=True)
-    # チャート設定
-    st.markdown('</div>', unsafe_allow_html=True)
 # -----------------------------
 # 左：銘柄リスト（columns 不使用）
 # -----------------------------
 with left_col:
+
+    st.markdown('<div class="stock-area">', unsafe_allow_html=True)
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
 
@@ -550,10 +549,14 @@ with left_col:
             save_settings(settings)   # ← 追加
             st.rerun()
 
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
 # -----------------------------
 # 右：チャート設定
 # -----------------------------
 with right_col:
+    st.markdown('<div class="setting-area">', unsafe_allow_html=True)
     st.markdown("## チャート設定")
 
     period_units = ["d", "w", "m", "y"]
@@ -602,3 +605,5 @@ with right_col:
     if st.button("銘柄リスト、チャート設定を保存"):
         save_settings(settings)
         st.success("保存しました")
+
+    st.markdown('</div>', unsafe_allow_html=True)
