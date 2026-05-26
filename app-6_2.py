@@ -98,6 +98,15 @@ div[data-testid="stHorizontalBlock"] {
     gap: 2px !important;
 }
 
+/* スマホでは stock-area と setting-area の columns だけ縦並びにする */
+@media (max-width: 600px) {
+    .stock-area, .setting-area {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+}
+
 </style>
 
 
@@ -387,6 +396,15 @@ for idx, chart in enumerate(settings["charts"]):
 # 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
 left_col, right_col,dunny_col = st.columns([0.4, 0.6,1.0])
+with col_left:
+    st.markdown('<div class="stock-area">', unsafe_allow_html=True)
+    # 銘柄リスト
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col_right:
+    st.markdown('<div class="setting-area">', unsafe_allow_html=True)
+    # チャート設定
+    st.markdown('</div>', unsafe_allow_html=True)
 # -----------------------------
 # 左：銘柄リスト（columns 不使用）
 # -----------------------------
