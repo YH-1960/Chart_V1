@@ -119,6 +119,33 @@ div[data-testid="stHorizontalBlock"] {
     }
 }
 
+@media (max-width: 600px) {
+
+    /* ボタン全体を小さく */
+    .stock-buttons button,
+    .stock-btn-row button,
+    button[kind="secondary"] {
+        padding: 2px 4px !important;
+        font-size: 11px !important;
+        min-width: 28px !important;
+        min-height: 26px !important;
+    }
+
+    /* ボタン間の余白も縮小 */
+    .stock-buttons {
+        gap: 2px !important;
+    }
+
+    /* Streamlit columns のボタン（↑ ↓ X） */
+    div[data-testid="column"] button {
+        padding: 2px 4px !important;
+        font-size: 11px !important;
+        min-width: 28px !important;
+        min-height: 26px !important;
+    }
+}
+
+
 </style>
 
 
