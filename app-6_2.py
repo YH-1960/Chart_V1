@@ -17,16 +17,20 @@ st.markdown("""
 
 <style>
 
+/* ================================
+   銘柄リスト（左側）
+================================ */
+
 /* 銘柄行 */
 .stock-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    width: auto;
+    width: 100%;
 }
 
-/* 左側 */
+/* 左側（コード＋会社名） */
 .stock-info {
     display: flex;
     align-items: center;
@@ -35,7 +39,7 @@ st.markdown("""
     min-width: 0;
 }
 
-/* 銘柄名 */
+/* 銘柄名（長い場合は…で省略） */
 .stock-name {
     color: gray;
     margin-left: 6px;
@@ -44,21 +48,22 @@ st.markdown("""
     text-overflow: ellipsis;
 }
 
-/* ボタン */
+/* ボタン（↑ ↓ X） */
 .stock-buttons {
     display: flex;
     gap: 4px;
     flex-shrink: 0;
-    flex-wrap: nowrap;  /* ← これを入れると絶対に横並び */
+    flex-wrap: nowrap;
 }
 
-/* ボタン高さ */
+/* ボタン高さ統一 */
 button[kind="secondary"] {
     min-height: 32px !important;
     padding: 0px 8px !important;
+    font-size: 13px !important;
 }
 
-/* ボタン横並び */
+/* ボタン行 */
 .stock-btn-row {
     display: flex;
     flex-direction: row;
@@ -70,44 +75,53 @@ button[kind="secondary"] {
     font-size: 13px;
 }
 
-button[kind="secondary"] {
-    min-height: 32px !important;
-    padding: 0px 8px !important;
-    font-size: 13px !important;
-}
+/* ================================
+   Streamlit columns の安全な調整
+   （壊れる原因だった align-items を削除）
+================================ */
 
-/* ★ columns を PC/スマホ共通で横並び固定 */
 div[data-testid="column"] {
-    # display: flex !important;
-    # flex-direction: row !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    # flex-wrap: nowrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
 
-/* ★ columns の親（stHorizontalBlock）も横並び固定 */
+/* 親ブロック */
 div[data-testid="stHorizontalBlock"] {
-    # display: flex !important;
-    # flex-direction: row !important;
     flex-wrap: nowrap !important;
     justify-content: flex-start !important;
-    align-items: center !important;
     width: auto !important;
     gap: 2px !important;
 }
 
-/* スマホでは stock-area と setting-area の columns だけ縦並びにする */
+/* ================================
+   スマホ最適化（ここが本命）
+   stock-area と setting-area だけ縦並び
+   チャート部分は影響なし
+================================ */
+
 @media (max-width: 600px) {
+
+    /* 銘柄リストと設定だけ縦並びにする */
     .stock-area, .setting-area {
-        display: flex !important;
-        flex-direction: column !important;
         width: 100% !important;
+        display: block !important;
+    }
+
+    /* 銘柄行の左右幅をスマホ向けに最適化 */
+    .stock-row {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    /* ボタンは横並び維持 */
+    .stock-buttons {
+        flex-wrap: nowrap;
     }
 }
 
 </style>
+
+
 
 
 
@@ -396,12 +410,13 @@ for idx, chart in enumerate(settings["charts"]):
 # 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
 left_col, right_col,dunny_col = st.columns([0.4, 0.6,1.0])
-with col_left:
+
+with left_col:
     st.markdown('<div class="stock-area">', unsafe_allow_html=True)
     # 銘柄リスト
     st.markdown('</div>', unsafe_allow_html=True)
 
-with col_right:
+with right_col:
     st.markdown('<div class="setting-area">', unsafe_allow_html=True)
     # チャート設定
     st.markdown('</div>', unsafe_allow_html=True)
