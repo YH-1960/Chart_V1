@@ -78,11 +78,11 @@ button[kind="secondary"] {
 
 /* ★ columns を PC/スマホ共通で横並び固定 */
 div[data-testid="column"] {
-    display: flex !important;
-    flex-direction: row !important;
+    # display: flex !important;
+    # flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    flex-wrap: nowrap !important;
+    # flex-wrap: nowrap !important;
     padding: 0 !important;
     margin: 0 !important;
 }
