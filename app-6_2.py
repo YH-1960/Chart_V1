@@ -69,13 +69,10 @@ button[kind="secondary"] {
     font-size: 13px;
 }
 
-/* Streamlit columns の余白削除 */
-div[data-testid="column"] > div {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: auto;
-    display: flex;
-    justify-content: flex-start !important;
+button[kind="secondary"] {
+    min-height: 32px !important;
+    padding: 0px 8px !important;
+    font-size: 13px !important;
 }
 
 /* ★ columns を PC/スマホ共通で横並び固定 */
