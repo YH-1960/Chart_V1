@@ -149,20 +149,13 @@ div[data-testid="stHorizontalBlock"] {
         display: block !important;
     }
 }
+
 @media (max-width: 600px) {
-
-    /* Streamlit columns を縦並びにする */
-    div[data-testid="column"] {
-        display: block !important;
-        width: 100% !important;
-    }
-
-    div[data-testid="stHorizontalBlock"] {
+    .ls-col, .rs-col {
         display: block !important;
         width: 100% !important;
     }
 }
-
 
 
 </style>
@@ -462,6 +455,7 @@ left_col, right_col,dunny_col = st.columns([0.4, 0.6,1.0])
 # -----------------------------
 with left_col:
 
+    st.markdown('<div class="ls-col">', unsafe_allow_html=True)
     st.markdown('<div class="stock-area">', unsafe_allow_html=True)
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
@@ -562,13 +556,14 @@ with left_col:
             save_settings(settings)   # ← 追加
             st.rerun()
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
+    st.markdown('</div>', unsafe_allow_html=True)  # stock-area を閉じる
+    st.markdown('</div>', unsafe_allow_html=True)  # ls-col を閉じる
 
 # -----------------------------
 # 右：チャート設定
 # -----------------------------
 with right_col:
+    st.markdown('<div class="rs-col">', unsafe_allow_html=True)
     st.markdown('<div class="setting-area">', unsafe_allow_html=True)
     st.markdown("## チャート設定")
 
@@ -619,4 +614,5 @@ with right_col:
         save_settings(settings)
         st.success("保存しました")
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)  # setting-area を閉じる
+    st.markdown('</div>', unsafe_allow_html=True)  # rs-col を閉じる
