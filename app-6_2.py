@@ -93,70 +93,32 @@ div[data-testid="stHorizontalBlock"] {
     gap: 2px !important;
 }
 
-/* ================================
-   スマホ最適化（ここが本命）
-   stock-area と setting-area だけ縦並び
-   チャート部分は影響なし
-================================ */
 
+/* ================================
+   スマホで「銘柄リスト＋設定」だけ縦並び
+================================ */
 @media (max-width: 600px) {
 
-    /* 銘柄リストと設定だけ縦並びにする */
+    /* 左右の columns ラッパーだけ縦並びにする */
+    .ls-col, .rs-col {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* stock-area / setting-area の幅も100% */
     .stock-area, .setting-area {
         width: 100% !important;
         display: block !important;
     }
 
-    /* 銘柄行の左右幅をスマホ向けに最適化 */
-    .stock-row {
-        flex-direction: row;
-        width: 100%;
-    }
-
-    /* ボタンは横並び維持 */
-    .stock-buttons {
-        flex-wrap: nowrap;
-    }
-}
-
-@media (max-width: 600px) {
-
-    /* Streamlit columns 内のボタンを強制的に小さく */
+    /* ボタン縮小（必要なら） */
     div[data-testid="column"] button {
         padding: 2px 4px !important;
         font-size: 11px !important;
         min-width: 28px !important;
         min-height: 26px !important;
     }
-
-    /* ボタン間の余白も縮める */
-    div[data-testid="column"] {
-        gap: 2px !important;
-    }
-
-    /* stock-buttons にも適用（念のため） */
-    .stock-buttons button {
-        padding: 2px 4px !important;
-        font-size: 11px !important;
-        min-width: 28px !important;
-        min-height: 26px !important;
-    }
 }
-
-@media (max-width: 600px) {
-    .stock-area, .setting-area {
-        width: 100% !important;
-        display: block !important;
-    }
-}
-
-@media (max-width: 600px) {
-    .ls-col, .rs-col {
-        display: block !important;
-        width: 100% !important;
-    }
-}
-
 
 </style>
 
