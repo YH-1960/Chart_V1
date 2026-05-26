@@ -266,8 +266,9 @@ def fetch_stock_data(symbol, period, interval):
     except Exception as e:
         return {"error": str(e)}
 
+
 # ==================================================
-# チャート表示（横スクロール方式）
+# チャート表示（iframe で横スクロール固定）
 # ==================================================
 symbols = settings["symbols"]
 
@@ -278,17 +279,12 @@ for idx, chart in enumerate(settings["charts"]):
 
     period = get_allowed_period(value, unit, interval)
 
-    # ★ 横スクロール開始
+    # 横スクロール開始
     st.markdown('<div class="chart-row">', unsafe_allow_html=True)
 
     for symbol in symbols:
         data = fetch_stock_data(symbol, period, interval)
         company_name = get_company_name_from_jpx(symbol)
-
-        title = (
-            f"<b>{value}{unit} ({interval})</b>"
-            f"　<span style='font-size:14px;color:gray;'>{company_name}</span>"
-        )
 
         st.markdown('<div class="chart-item">', unsafe_allow_html=True)
 
@@ -328,7 +324,7 @@ for idx, chart in enumerate(settings["charts"]):
                 unsafe_allow_html=True
             )
 
-        # --- チャート ---
+        # --- チャート作成 ---
         fig = go.Figure()
         fig.add_trace(go.Candlestick(
             x=df.index,
@@ -341,32 +337,27 @@ for idx, chart in enumerate(settings["charts"]):
         ))
 
         fig.update_layout(
-            title=title,
+            title=f"{value}{unit} ({interval})　<span style='font-size:14px;color:gray;'>{company_name}</span>",
             height=350,
             xaxis_rangeslider_visible=False,
             showlegend=False,
             margin=dict(l=10, r=10, t=40, b=10),
-            title_font=dict(size=14)
         )
 
-        fig.update_layout(
-            font=dict(size=16),
-            title_font=dict(size=20)
-        )
+        # --- iframe 化（ここが重要） ---
+        html = fig.to_html(include_plotlyjs="cdn", full_html=False)
+        iframe_html = f"""
+        <iframe srcdoc="{html.replace('"', '&quot;')}"
+                style="width:360px; height:380px; border:none;">
+        </iframe>
+        """
 
-        fig.update_xaxes(tickfont=dict(size=14))
-        fig.update_yaxes(tickfont=dict(size=16))
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True,
-            config={"displayModeBar": False, "staticPlot": True}
-        )
+        st.markdown(iframe_html, unsafe_allow_html=True)
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ★ 横スクロール終了
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 # ==================================================
 # 銘柄リスト & チャート設定（元のまま）
