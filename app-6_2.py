@@ -80,6 +80,17 @@ st.markdown("""
     }
 }
 
+<style>
+.chart-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+.chart-item {
+    min-width: 350px; /* チャートの最小幅 */
+}
+</style>
 
 # ****************
 </style>
@@ -258,7 +269,10 @@ def fetch_stock_data(symbol, period, interval):
 # ==================================================
 symbols = settings["symbols"]
 
+st.markdown('<div class="chart-row">', unsafe_allow_html=True)
 for idx, chart in enumerate(settings["charts"]):
+    st.markdown('<div class="chart-item">', unsafe_allow_html=True)
+    
     value = chart["value"]
     unit = chart["unit"]
     interval = chart["interval"]
@@ -362,8 +376,12 @@ for idx, chart in enumerate(settings["charts"]):
            }
            # key=f"chart_{idx}_{symbol}"
         )
+        
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.markdown('</div>', unsafe_allow_html=True)
 
-
+st.markdown('</div>', unsafe_allow_html=True)   
+        
 # ==================================================
 # 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
