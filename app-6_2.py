@@ -149,6 +149,19 @@ div[data-testid="stHorizontalBlock"] {
         display: block !important;
     }
 }
+@media (max-width: 600px) {
+
+    /* Streamlit columns を縦並びにする */
+    div[data-testid="column"] {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] {
+        display: block !important;
+        width: 100% !important;
+    }
+}
 
 
 
