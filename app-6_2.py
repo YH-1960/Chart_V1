@@ -11,7 +11,7 @@ import os
 st.set_page_config(layout="wide")
 
 # ==================================================
-# CSS（スマホ最適化 + チャート横スクロール）
+# CSS（スマホ最適化）
 # ==================================================
 st.markdown("""
 <style>
@@ -80,21 +80,8 @@ st.markdown("""
     }
 }
 
-/* ================================
-   チャート横スクロール（追加）
-================================ */
-.chart-row {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
 
-.chart-item {
-    min-width: 360px;  /* チャートの最小幅 */
-}
-
+# ****************
 </style>
 """, unsafe_allow_html=True)
 
@@ -170,7 +157,6 @@ def safe_series(data):
     data = pd.to_numeric(data, errors="coerce")
     data = data.dropna()
     return data.reset_index(drop=True)
-
 # ==================================================
 # JPX 銘柄一覧 CSV 読み込み
 # ==================================================
@@ -189,6 +175,7 @@ def get_company_name_from_jpx(symbol):
     if len(row) == 0:
         return ""
     return row.iloc[0]["銘柄名"]
+
 
 # ==================================================
 # yfinance 制限対応
@@ -266,9 +253,8 @@ def fetch_stock_data(symbol, period, interval):
     except Exception as e:
         return {"error": str(e)}
 
-
 # ==================================================
-# チャート表示（iframe で横スクロール固定）
+# チャート表示（最上部）
 # ==================================================
 symbols = settings["symbols"]
 
@@ -278,42 +264,53 @@ for idx, chart in enumerate(settings["charts"]):
     interval = chart["interval"]
 
     period = get_allowed_period(value, unit, interval)
+    # title = f"{value}{unit} ({interval})"
 
-    # 横スクロール開始
-    st.markdown('<div class="chart-row">', unsafe_allow_html=True)
+    cols = st.columns(len(symbols))
 
-    for symbol in symbols:
+    for col, symbol in zip(cols, symbols):
         data = fetch_stock_data(symbol, period, interval)
+
+        # タイトルを銘柄コード付きに変更
         company_name = get_company_name_from_jpx(symbol)
 
-        st.markdown('<div class="chart-item">', unsafe_allow_html=True)
+        title = (
+             f"<b>{value}{unit} ({interval})</b>"
+             f"　<span style='font-size:14px;color:gray;'>{company_name}</span>"
+        )
 
         if data is None or "error" in data:
-            st.error("データなし")
-            st.markdown('</div>', unsafe_allow_html=True)
+            col.error("データなし")
             continue
 
         df = data["df"]
         currency = data["currency"]
+
+        # --- 銘柄名を取得 ---
+        company_name = get_company_name_from_jpx(symbol)
 
         open_data = safe_series(df["Open"])
         high_data = safe_series(df["High"])
         low_data = safe_series(df["Low"])
         close_data = safe_series(df["Close"])
 
-        # --- 直近2営業日 ---
+        # データ取得（直近2営業日）
         stock = yf.Ticker(symbol)
         hist = stock.history(period="2d")
+
+        # 最新終値
         latest_close = hist["Close"].iloc[-1]
+
+        # 前日終値
         prev_close = hist["Close"].iloc[-2]
 
         diff = latest_close - prev_close
         pct = diff / prev_close * 100 if prev_close != 0 else 0
         color = "red" if diff > 0 else "blue" if diff < 0 else "gray"
 
-        # --- 1行目だけ銘柄名表示 ---
+        # --- 1行目だけ銘柄コード + 銘柄名 + 株価を表示 ---
         if idx == 0:
-            st.markdown(
+            col.markdown(
                 f"""
                 <span style="font-size:20px;font-weight:bold;">{symbol} {company_name}</span><br>
                 <span style="font-size:24px;font-weight:bold;">{latest_close:.2f} {currency}</span><br>
@@ -324,7 +321,7 @@ for idx, chart in enumerate(settings["charts"]):
                 unsafe_allow_html=True
             )
 
-        # --- チャート作成 ---
+        # チャート本体
         fig = go.Figure()
         fig.add_trace(go.Candlestick(
             x=df.index,
@@ -337,33 +334,43 @@ for idx, chart in enumerate(settings["charts"]):
         ))
 
         fig.update_layout(
-            title=f"{value}{unit} ({interval})　<span style='font-size:14px;color:gray;'>{company_name}</span>",
+            # title=symbol,
+            title=title,
             height=350,
             xaxis_rangeslider_visible=False,
             showlegend=False,
             margin=dict(l=10, r=10, t=40, b=10),
+            title_font=dict(size=14)
         )
 
-        # --- iframe 化（ここが重要） ---
-        html = fig.to_html(include_plotlyjs="cdn", full_html=False)
-        iframe_html = f"""
-        <iframe srcdoc="{html.replace('"', '&quot;')}"
-                style="width:360px; height:380px; border:none;">
-        </iframe>
-        """
+        # ここに追加！
+        fig.update_layout(
+           font=dict(size=16),
+           title_font=dict(size=20)
+        )
 
-        st.markdown(iframe_html, unsafe_allow_html=True)
+        fig.update_xaxes(tickfont=dict(size=14)) # X軸
+        fig.update_yaxes(tickfont=dict(size=16)) # Y軸
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
+        # col.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+        col.plotly_chart(
+           fig,
+           use_container_width=True,
+           config={
+               "displayModeBar": False,
+               "staticPlot": True
+           }
+           # key=f"chart_{idx}_{symbol}"
+        )
 
 
 # ==================================================
-# 銘柄リスト & チャート設定（元のまま）
+# 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
-left_col, right_col, dunny_col = st.columns([0.6, 0.6, 1.0])
-
+left_col, right_col,dunny_col = st.columns([0.6, 0.6,1.0])
+# -----------------------------
+# 左：銘柄リスト（columns 不使用）
+# -----------------------------
 with left_col:
     st.markdown("## 銘柄リスト")
     symbols = settings["symbols"]
@@ -401,9 +408,11 @@ with left_col:
     </style>
     """, unsafe_allow_html=True)
 
+
     for i, sym in enumerate(symbols):
         company_name = get_company_name_from_jpx(sym)
 
+        # 左：銘柄名（広め） / 右：ボタン3つ（固定幅）
         col_name, col_btns = st.columns([6, 3])
 
         with col_name:
@@ -413,23 +422,24 @@ with left_col:
             )
 
         with col_btns:
+            # ボタン3つをさらに columns で横並びに
             b1, b2, b3 = st.columns([1, 1, 1])
 
             with b1:
                 if st.button("↑", key=f"up_{i}"):
                     if i > 0:
-                        symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                        settings["symbols"] = symbols
-                        save_settings(settings)
-                        st.rerun()
+                      symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+                      settings["symbols"] = symbols
+                      save_settings(settings)
+                      st.rerun()
 
             with b2:
                 if st.button("↓", key=f"down_{i}"):
                     if i < len(symbols)-1:
-                        symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                        settings["symbols"] = symbols
-                        save_settings(settings)
-                        st.rerun()
+                      symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+                      settings["symbols"] = symbols
+                      save_settings(settings)
+                      st.rerun()
 
             with b3:
                 if st.button("Del", key=f"del_{i}"):
@@ -438,14 +448,24 @@ with left_col:
                     save_settings(settings)
                     st.rerun()
 
+
+
+
+
+
+
+   # ***************************************************
     new_symbol = st.text_input("銘柄を追加", "")
     if st.button("追加"):
         if new_symbol.strip():
             symbols.append(new_symbol.strip())
             settings["symbols"] = symbols
-            save_settings(settings)
+            save_settings(settings)   # ← 追加
             st.rerun()
 
+# -----------------------------
+# 右：チャート設定
+# -----------------------------
 with right_col:
     st.markdown("## チャート設定")
 
@@ -489,6 +509,7 @@ with right_col:
             chart["unit"] = unit
             chart["interval"] = INTERVAL_OPTIONS[interval_label]
 
+            # ★ ここに追加！
             save_settings(settings)
 
     if st.button("銘柄リスト、チャート設定を保存"):
