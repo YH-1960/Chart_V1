@@ -2,3 +2,5 @@ streamlit
 yfinance
 plotly
 pandas
+streamlit-browser-storage
+requirements.txt
