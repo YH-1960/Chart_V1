@@ -382,7 +382,7 @@ with left_col:
     for i, sym in enumerate(symbols):
        company_name = get_company_name_from_jpx(sym)
  
-       col1, col2, col3, col4 = st.columns([3.5, 0.4, 0.4, 0.8])
+       col1, col2, col3, col4 = st.columns([3.5, 0.4, 0.4, 1.0])
 
        with col1:
            st.markdown(f"**{sym}**  <span style='color:gray;'>{company_name}</span>", unsafe_allow_html=True)
