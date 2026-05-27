@@ -8,6 +8,10 @@ import pandas as pd
 import json
 import os
 
+from streamlit_local_storage import LocalStorage
+
+localS = LocalStorage()
+
 # ==================================================
 # Streamlit
 # ==================================================
@@ -91,7 +95,16 @@ st.markdown("""
 # ==================================================
 # 保存ファイル
 # ==================================================
-SAVE_FILE = "settings.json"
+# SAVE_FILE = "settings.json"
+
+# ==================================================
+# save_settings変更
+# ==================================================
+def save_settings(settings):
+    localS.setItem(
+        "stock_settings",
+        json.dumps(settings, ensure_ascii=False)
+    )
 
 # ==================================================
 # 足種
@@ -123,20 +136,22 @@ DEFAULT_SETTINGS = {
 # 設定ロード
 # ==================================================
 def load_settings():
-    if os.path.exists(SAVE_FILE):
-        try:
-            with open(SAVE_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            pass
+    try:
+       settings = localS.getItem("stock_settings")
+
+       if settings is not None:
+          return json.loads(settings)
+
+    except Exception:
+       pass
     return DEFAULT_SETTINGS
 
 # ==================================================
 # 設定保存
 # ==================================================
-def save_settings(settings):
-    with open(SAVE_FILE, "w", encoding="utf-8") as f:
-        json.dump(settings, f, ensure_ascii=False, indent=2)
+# def save_settings(settings):
+#    with open(SAVE_FILE, "w", encoding="utf-8") as f:
+#        json.dump(settings, f, ensure_ascii=False, indent=2)
 
 # ==================================================
 # session_state
@@ -469,7 +484,7 @@ with right_col:
             chart["interval"] = INTERVAL_OPTIONS[interval_label]
 
             # ★ ここに追加！
-            save_settings(settings)
+            # save_settings(settings)
 
     if st.button("銘柄リスト、チャート設定を保存"):
         save_settings(settings)
