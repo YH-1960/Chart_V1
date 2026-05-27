@@ -370,7 +370,7 @@ for idx, chart in enumerate(settings["charts"]):
 # ==================================================
 # 銘柄リスト & チャート設定（チャートの下で横並び）
 # ==================================================
-left_col, right_col,dunny_col = st.columns([0.6, 0.6,1.0])
+left_col, right_col,dunny_col = st.columns([0.7, 0.7,1.0])
 
 # -----------------------------
 # 左：銘柄リスト
@@ -382,7 +382,7 @@ with left_col:
     for i, sym in enumerate(symbols):
        company_name = get_company_name_from_jpx(sym)
  
-       col1, col2, col3, col4 = st.columns([3.5, 0.4, 0.4, 1.0])
+       col1, col2, col3, col4 = st.columns([3.5, 0.5, 0.5, 1.2])
 
        with col1:
            st.markdown(f"**{sym}**  <span style='color:gray;'>{company_name}</span>", unsafe_allow_html=True)
