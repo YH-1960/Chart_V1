@@ -50,6 +50,12 @@ st.markdown("""
     flex-shrink: 0;
 }
 
+/* ボタン高さ縮小 */
+button[kind="secondary"] {
+    min-height: 32px !important;
+    padding: 0px 8px !important;
+}
+
 /* スマホ */
 @media (max-width: 600px) {
 
@@ -66,9 +72,6 @@ st.markdown("""
         min-height: 32px !important;
     }
 
-    div[data-testid="column"] {
-        width: 100% !important;
-    }
 }
 
 /* スマホ用：ボタンをさらに小さくする */
@@ -80,8 +83,54 @@ st.markdown("""
     }
 }
 
+/* ボタン横並び用 */
+.stock-btn-row {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+.stock-btn-row button {
+    padding: 4px 8px;
+    font-size: 13px;
+}
+@media (max-width: 600px) {
+    .stock-btn-row button {
+        padding: 2px 4px !important;
+        font-size: 11px !important;
+        min-width: 32px !important;
+    }
+}
 
-# ****************
+/* ★ Streamlit columns を横並び固定にする（PC・スマホ両方） */
+div[data-testid="column"] {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* columns 内を左寄せ */
+div[data-testid="column"] > div {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start !important;
+}
+
+/* ★ Streamlit の columns 親要素も横並び固定にする */
+div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;   /* ← 中央寄せをやめる */
+    align-items: center !important;
+    width: 100% !important;                   /* ← 左切れ防止 */
+    gap: 4px !important;                      /* ← PC の間隔を詰める */
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -382,7 +431,8 @@ with left_col:
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
-        border-bottom: 1px solid #eee;
+        # border-bottom: 1px solid #eee;
+        border-bottom: none;   /* ← これに変更 */
     }
     .stock-left {
         display: flex;
@@ -410,47 +460,52 @@ with left_col:
 
 
     for i, sym in enumerate(symbols):
-        company_name = get_company_name_from_jpx(sym)
+      company_name = get_company_name_from_jpx(sym)
 
-        # 左：銘柄名（広め） / 右：ボタン3つ（固定幅）
-        col_name, col_btns = st.columns([6, 3])
+      # 銘柄名
+      st.markdown(
+        f"""
+        <div style="font-size:16px;font-weight:bold;margin-bottom:6px;">
+            {sym}
+            <span style="color:gray;font-weight:normal;">
+                {company_name}
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True
+      )
 
-        with col_name:
-            st.markdown(
-                f"<b>{sym}</b> <span style='color:gray;'>{company_name}</span>",
-                unsafe_allow_html=True
-            )
+      # ボタン行
+      # ★ 完全横並び（Streamlit columns）
+      btn1, btn2, btn3, spacer = st.columns([0.12, 0.12, 0.18, 1])
 
-        with col_btns:
-            # ボタン3つをさらに columns で横並びに
-            b1, b2, b3 = st.columns([1, 1, 1])
+      with btn1:
+          up = st.button("↑", key=f"up_{i}")
 
-            with b1:
-                if st.button("↑", key=f"up_{i}"):
-                    if i > 0:
-                      symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
-                      settings["symbols"] = symbols
-                      save_settings(settings)
-                      st.rerun()
+      with btn2:
+          down = st.button("↓", key=f"down_{i}")
 
-            with b2:
-                if st.button("↓", key=f"down_{i}"):
-                    if i < len(symbols)-1:
-                      symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
-                      settings["symbols"] = symbols
-                      save_settings(settings)
-                      st.rerun()
-
-            with b3:
-                if st.button("Del", key=f"del_{i}"):
-                    symbols.pop(i)
-                    settings["symbols"] = symbols
-                    save_settings(settings)
-                    st.rerun()
+      with btn3:
+          delete = st.button("削除", key=f"del_{i}")
 
 
 
+      if up:
+        if i > 0:
+            symbols[i], symbols[i-1] = symbols[i-1], symbols[i]
+            save_settings(settings)
+            st.rerun()
 
+      if down:
+        if i < len(symbols)-1:
+            symbols[i], symbols[i+1] = symbols[i+1], symbols[i]
+            save_settings(settings)
+            st.rerun()
+
+      if delete:
+        symbols.pop(i)
+        save_settings(settings)
+        st.rerun()
 
 
 
