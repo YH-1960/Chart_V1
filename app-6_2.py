@@ -1,4 +1,4 @@
-### 〇app-7_3.1.py
+### 〇app-7_3.py
 
 
 import streamlit as st
@@ -124,11 +124,11 @@ INTERVAL_OPTIONS = {
 # 初期設定
 # ==================================================
 DEFAULT_SETTINGS = {
-    "symbols": ["6758.T", "7974.T", "9984.T"],
+    "symbols": ["6758.T", "6752.T", "6501.T"],
     "charts": [
-        {"value": 5, "unit": "d", "interval": "1m"},
-        {"value": 3, "unit": "m", "interval": "1h"},
-        {"value": 1, "unit": "y", "interval": "1d"}
+        {"value": 1, "unit": "d", "interval": "15m"},
+        {"value": 2, "unit": "m", "interval": "1d"},
+        {"value": 2, "unit": "y", "interval": "1d"}
     ]
 }
 
