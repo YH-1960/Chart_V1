@@ -1,4 +1,5 @@
-### app-7_3.py
+### 〇app-7_3.py
+
 
 import streamlit as st
 import yfinance as yf
@@ -381,7 +382,7 @@ with left_col:
     for i, sym in enumerate(symbols):
        company_name = get_company_name_from_jpx(sym)
  
-       col1, col2, col3, col4 = st.columns([4.0, 0.4, 0.4, 0.6])
+       col1, col2, col3, col4 = st.columns([4.0, 0.4, 0.4, 0.8])
 
        with col1:
            st.markdown(f"**{sym}**  <span style='color:gray;'>{company_name}</span>", unsafe_allow_html=True)
@@ -401,9 +402,9 @@ with left_col:
                    settings["symbols"] = symbols
                    save_settings(settings)
                    st.rerun()
-
+a
        with col4:
-           if st.button("削除", key=f"del_{i}"):
+           if st.button("Del", key=f"del_{i}"):
                symbols.pop(i)
                settings["symbols"] = symbols
                save_settings(settings)
